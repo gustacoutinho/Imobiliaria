@@ -100,25 +100,15 @@ class UserController {
    */
   async updateProfile({ auth, request, response }) {
     const userData = request.only([
-      "name",
-      "username",
-      "email",
-      "password",
-      "bio",
-      "website_url",
-      "location",
+      "login",
+      "senha",
     ]);
 
     try {
       const user = auth.current.user;
 
-      user.name = userData.name;
-      user.username = userData.username;
-      user.email = userData.email;
-      user.password = userData.password;
-      user.bio = userData.bio;
-      user.website_url = userData.website_url;
-      user.location = userData.location;
+      user.login = userData.login;
+      user.senha = userData.senha;
 
       await user.save();
     } catch (error) {
@@ -131,31 +121,21 @@ class UserController {
   // PUT http://localhost:3333/users/3
   async update({ auth, params, request, response }) {
     const userData = request.only([
-      "name",
-      "username",
-      "email",
-      "password",
-      "bio",
-      "website_url",
-      "location",
+      "login",
+      "senha",
     ]);
 
     try {
       const user = await User.findOrFail(params.id);
 
-      user.name = userData.name;
-      user.username = userData.username;
-      user.email = userData.email;
-      user.password = userData.password;
-      user.bio = userData.bio;
-      user.website_url = userData.website_url;
-      user.location = userData.location;
+      user.login = userData.login;
+      user.senha = userData.senha;
 
       await user.save();
     } catch (error) {
       return response.status(404).json({
         status: "error",
-        message: "Não foi possível atualizar o seu perfil!",
+        message: "Não foi possível atualizar o seu cadastro!",
       });
     }
   }

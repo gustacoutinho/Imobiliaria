@@ -19,11 +19,13 @@ const Route = use('Route')
 Route.get('/', () => {
   return { greeting: 'Tá funcinando a bagaça' }
 })
-Route.post("/users", "UserController.singup");
-Route.get("/users", "UserController.index");
 Route.post("/login", "UserController.login");
+Route.post("/users", "UserController.singup");
+
 Route.group(() => {
-  Route.delete("/delete/:id", "UserController.destroy");
+  Route.put("/users/:id", "UserController.update");
+  Route.put("/profile", "UserController.updateProfile");
+  Route.get("/users", "UserController.index");
 }).middleware(["auth:jwt"]);
 
 

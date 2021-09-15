@@ -3,9 +3,9 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class ChangePersonSchema extends Schema {
+class ChangeClientSchema extends Schema {
   up () {
-    this.table('people', (table) => {
+    this.table('clients', (table) => {
       table.integer('user_id')
       .unsigned()
       .references('id')
@@ -16,11 +16,11 @@ class ChangePersonSchema extends Schema {
   }
 
   down () {
-    this.table('people', (table) => {
+    this.table('clients', (table) => {
       table.dropForeign("user_id")
       table.dropColumn("user_id")
     })
   }
 }
 
-module.exports = ChangePersonSchema
+module.exports = ChangeClientSchema

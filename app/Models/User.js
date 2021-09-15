@@ -15,8 +15,8 @@ class User extends Model {
      * it to the database.
      */
     this.addHook('beforeSave', async (userInstance) => {
-      if (userInstance.dirty.password) {
-        userInstance.password = await Hash.make(userInstance.password)
+      if (userInstance.dirty.senha) {
+        userInstance.senha = await Hash.make(userInstance.senha)
       }
     })
   }
@@ -33,6 +33,41 @@ class User extends Model {
    */
   tokens () {
     return this.hasMany('App/Models/Token')
+  }
+
+  tweets () {
+    return this.hasMany ('App/Models/Tweet')
+  }
+
+  replies (){
+    return this.hasMany ('App/Models/Reply')
+  }
+
+  favorites (){
+    return this.hasMany ('App/Models/Favorite')
+  }
+
+  // USER -> FOLLOWERS -> USER
+  followers (){
+    return this.belongsToMany (
+      'App/Models/User', 
+      'user_id',
+      'follower_id'
+      ).pivotTable ('followers');
+  }
+  following (){
+    return this.belongsToMany (
+      'App/Models/User', 
+      'follower_id',
+      'user_id'
+      ).pivotTable ('followers');
+  }
+  static get createdAtColumn () {
+    return null;
+  }
+
+  static get updatedAtColumn () {
+    return null;
   }
 }
 

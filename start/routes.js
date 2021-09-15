@@ -17,5 +17,17 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
+  return { greeting: 'Tá funcinando a bagaça' }
 })
+Route.post("/users", "UserController.singup");
+Route.get("/users", "UserController.index");
+Route.post("/login", "UserController.login");
+Route.group(() => {
+  Route.delete("/delete/:id", "UserController.destroy");
+}).middleware(["auth:jwt"]);
+
+
+
+
+
+

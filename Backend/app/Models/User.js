@@ -31,9 +31,6 @@ class User extends Model {
    *
    * @return {Object}
    */
-
-
-  // USER -> FOLLOWERS -> USER
  
   static get createdAtColumn () {
     return null;
@@ -41,6 +38,12 @@ class User extends Model {
 
   static get updatedAtColumn () {
     return null;
+  }
+  employee () {
+    return this.hasOne('App/Models/Employee');
+  }
+  client () {
+    return this.hasOne('App/Models/Client');
   }
 }
 

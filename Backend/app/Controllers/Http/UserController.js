@@ -10,29 +10,12 @@ const User = use("App/Models/User");
  * Resourceful controller for interacting with users
  */
 class UserController {
-  /**
-   * Show a list of all users.
-   * GET users
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
+ 
   async index({ request, response, view }) {
     const users = await User.all();
-
     return response.json(users);
   }
 
-  /**
-   * Create/save a new user.
-   * POST users
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async singup({ request, response, auth }) {
     const userData = request.only(["login", "senha"]);
 
@@ -63,24 +46,19 @@ class UserController {
 
       return response.json({
         status: "success",
+        message: "Usuario logado!",
         data: token,
       });
     } catch (error) {
-      console.log(error)
-      return error.message
+      return response.status(404).json({
+        status: "error",
+        message: "Email ou senha inválido!",
+      });
     }
   }
 
-  /**
-   * Display a single user.
-   * GET users/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async show({ params, response }) {
-    try {
+  async showUser({ params, response }) {
+    try {  
       return response.json(await User.findOrFail(params.id));
     } catch (error) {
       return response.status(404).json({
@@ -90,14 +68,6 @@ class UserController {
     }
   }
 
-  /**
-   * Update user details.
-   * PUT or PATCH users/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async updateProfile({ auth, request, response }) {
     const userData = request.only([
       "login",
@@ -111,6 +81,12 @@ class UserController {
       user.senha = userData.senha;
 
       await user.save();
+
+      return response.json({
+        status: "success",
+        message: "Usuário atualizado!",
+      });
+
     } catch (error) {
       return response.status(404).json({
         status: "error",
@@ -118,7 +94,7 @@ class UserController {
       });
     }
   }
-  // PUT http://localhost:3333/users/3
+
   async update({ auth, params, request, response }) {
     const userData = request.only([
       "login",
@@ -140,14 +116,6 @@ class UserController {
     }
   }
 
-  /**
-   * Delete a user with id.
-   * DELETE users/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async destroy({ params, auth, request, response }) {
     try {
       const user = await User.findOrFail(params.id);
@@ -156,7 +124,7 @@ class UserController {
 
       return response.json({
         status: "success",
-        message: "Usuário removido com o sucesso!",
+        message: "Usuário removido com sucesso!",
       });
     } catch (error) {
       return response.status(404).json({
@@ -165,6 +133,28 @@ class UserController {
       });
     }
   }
+
+  async me({response, auth }) {
+    try {
+      const user = await User.query()
+        .where("id", auth.current.user.id)
+        .with("client", (builder) => {
+        builder.with("property")
+        })
+        .firstOrFail();
+
+      return response.json({
+        status: "success",
+        data: user,
+      });
+    } catch (error) {
+      return response.status(404).json({
+        status: "error",
+        message: "Não foi possível mostrar o seu imóvel!",
+      });
+    }
+  }
 }
+
 
 module.exports = UserController;

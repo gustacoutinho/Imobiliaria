@@ -22,6 +22,7 @@ class PropertyHouseApartmentSchema extends Schema {
       .inTable('property_houses')
       .onUpdate('CASCADE')
       .onDelete('CASCADE').notNullable().unique()
+
     })
   }
 

@@ -31,7 +31,6 @@ class EmployeeSchema extends Schema {
       .inTable('users')
       .onUpdate('CASCADE')
       .onDelete('CASCADE').unique()
-      // table.unique(['id', 'people_id','user_id']);
     })
   }
 
